@@ -37,7 +37,7 @@ public class ProblemSet {
 		text = removePunctuation(text.toLowerCase());
 
 		// Split text into words
-		String words[] = text.split(" ");
+		String words[] = text.replace(".", " ").trim().split(" ");
 
 		// Variables for word statistics
 		int totalWords = 0;
@@ -61,14 +61,24 @@ public class ProblemSet {
 		// LOOP THROUGH WORDS
 		for (int i = 0; i < words.length; i++) {
 
-			// Store current word
 			String word = words[i];
 
-			// Ignore empty words
-			if (word.length() == 0) {
+			// ✔ FIX: check if word contains at least one letter
+			boolean hasLetter = false;
 
+			for (int j = 0; j < word.length(); j++) {
+
+				char ch = word.charAt(j);
+
+				if (ch >= 'a' && ch <= 'z') {
+					hasLetter = true;
+					break;
+				}
+			}
+
+			// skip invalid words (no letters)
+			if (!hasLetter) {
 				continue;
-
 			}
 
 			// Increase total words
@@ -84,19 +94,14 @@ public class ProblemSet {
 			if (word.length() > longestLength) {
 
 				longestLength = word.length();
-
 				longestWords.clear();
-
 				longestWords.add(word);
 
 			}
 			else if (word.length() == longestLength) {
 
-				// Avoid duplicates
 				if (!longestWords.contains(word)) {
-
 					longestWords.add(word);
-
 				}
 			}
 
@@ -104,26 +109,35 @@ public class ProblemSet {
 			if (word.length() < shortestLength) {
 
 				shortestLength = word.length();
-
 				shortestWords.clear();
-
 				shortestWords.add(word);
 
 			}
 			else if (word.length() == shortestLength) {
 
-				// Avoid duplicates
 				if (!shortestWords.contains(word)) {
-
 					shortestWords.add(word);
-
 				}
 			}
 		}
 
+		// Handle no valid words
+		if (totalWords == 0) {
+
+			System.out.println();
+			System.out.println("There are no words.");
+
+			input.close();
+			return;
+		}
+
 		// Calculate average word length
-		double averageWordLength =
+		double averageWordLength = 0;
+
+		if (totalWords > 0) {
+			averageWordLength =
 				(double) totalWordLength / totalWords;
+		}
 
 		// OUTPUT RESULTS
 		System.out.println();
@@ -144,33 +158,26 @@ public class ProblemSet {
 		System.out.println("Word Frequency:");
 		System.out.println();
 
-		// Print HashMap
 		printFrequency(frequency);
 
 		// ADVANCED STATISTICS
 		System.out.println();
 
-		// Print longest words
 		System.out.print("Longest Word: ");
 		printList(longestWords);
 
-		// Print shortest words
 		System.out.print("Shortest Word: ");
 		printList(shortestWords);
 
-		// Print average word length
 		System.out.println("Average Word Length: " +
 							averageWordLength);
 
-		// Print number of sentences
 		System.out.println("Number of Sentences: " +
 							totalSentences);
 
-		// Print unique words
 		System.out.println("Unique Words: " +
 							frequency.size());
 
-		// Close Scanner
 		input.close();
 	}
 
@@ -180,11 +187,8 @@ public class ProblemSet {
 		int spaces = 0;
 
 		for (int i = 0; i < text.length(); i++) {
-
 			if (text.charAt(i) == ' ') {
-
 				spaces++;
-
 			}
 		}
 
@@ -208,7 +212,6 @@ public class ProblemSet {
 				ch == 'u') {
 
 				vowels++;
-
 			}
 		}
 
@@ -229,7 +232,6 @@ public class ProblemSet {
 				ch == '?') {
 
 				sentences++;
-
 			}
 		}
 
@@ -239,10 +241,7 @@ public class ProblemSet {
 	// METHOD TO REMOVE PUNCTUATION
 	public static String removePunctuation(String text) {
 
-		text = text.replace(".", "");
 		text = text.replace(",", "");
-		text = text.replace("!", "");
-		text = text.replace("?", "");
 		text = text.replace(";", "");
 		text = text.replace(":", "");
 		text = text.replace("\"", "");
@@ -257,28 +256,19 @@ public class ProblemSet {
 			String word,
 			HashMap<String, Integer> frequency) {
 
-		// Ignore common words
 		if (word.equals("the") ||
 			word.equals("a") ||
 			word.equals("an") ||
 			word.equals("and") ||
 			word.equals("is")) {
-
 			return;
-
 		}
 
-		// Check if word already exists
 		if (frequency.containsKey(word)) {
-
-			frequency.put(word,
-					frequency.get(word) + 1);
-
+			frequency.put(word, frequency.get(word) + 1);
 		}
 		else {
-
 			frequency.put(word, 1);
-
 		}
 	}
 
@@ -286,11 +276,9 @@ public class ProblemSet {
 	public static void printFrequency(
 			HashMap<String, Integer> frequency) {
 
-		// Loop through HashMap
 		for (Map.Entry<String, Integer> entry :
 				frequency.entrySet()) {
 
-			// Print word and frequency
 			System.out.println(entry.getKey() +
 								" - " +
 								entry.getValue());
@@ -306,9 +294,7 @@ public class ProblemSet {
 			System.out.print(list.get(i));
 
 			if (i < list.size() - 1) {
-
 				System.out.print(", ");
-
 			}
 		}
 
