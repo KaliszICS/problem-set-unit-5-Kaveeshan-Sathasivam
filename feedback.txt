@@ -1,0 +1,9 @@
+K(30%): 100
+I(30%): 93
+C(10%): 100
+A(30%): 97
+97%
+
+Make sure to ignore all punctuation.
+When there are no words you should still be outputting the options just with the appropriate values.
+You should use functions for the option 3 code just like you did for option 1.
